@@ -52,7 +52,6 @@ for path in /usr/lib/x86_64-linux-gnu/libstdc++.so.6; do
     if [ -f "$path" ]; then
         echo "Copying into AppDir:: $path"
         cp "$path" usr/optional/libstdc++/
-        break
     fi
 done
 
@@ -60,7 +59,6 @@ for path in /lib/x86_64-linux-gnu/libgcc_s.so.1 /lib/x86_64-linux-gnu/libm.so.6 
     if [ -f "$path" ]; then
         echo "Copying into AppDir: $path"
         cp "$path" usr/optional/libgcc/
-        break
     fi
 done
 
