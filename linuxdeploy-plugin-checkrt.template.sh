@@ -1,8 +1,5 @@
 #! /bin/bash
 
-set -x
-set -e
-
 OFFSET=-1
 
 if [ $OFFSET -le 0 ]; then
@@ -42,9 +39,40 @@ if [ ! -d "$APPDIR" ]; then
     exit 1
 fi
 
-cd "$APPDIR"
+pushd "$APPDIR"
 
+# extract files from appended tarball
 dd if="$script" skip="$OFFSET" iflag=skip_bytes,count_bytes | tar xvz
+
+# copy system libraries
+mkdir -p usr/optional/{libstdc++,libgcc_s}
+
+for path in /usr/lib/x86_64-linux-gnu/libstdc++.so.6; do
+    if [ -f "$path" ]; then
+        cp "$path" usr/optional/libstdc++/
+        break
+    fi
+done
+
+for path in /lib/x86_64-linux-gnu/libgcc_s.so.1; do
+    if [ -f "$path" ]; then
+        cp "$path" usr/optional/libgcc_s/
+        break
+    fi
+done
+
+if [ -f AppRun ]; then
+    rm AppRun
+fi
+
+# use patched AppRun
+mv AppRun_patched AppRun
+
+# remove unused shell script
+[ -f AppRun.sh ] && rm AppRun.sh
+
+# leave AppDir
+popd
 
 # important: exit before the appended tarball
 exit
