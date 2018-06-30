@@ -7,12 +7,14 @@ gccpre=""
 execpre=""
 libc6arch="libc6,x86-64"
 
-if [ ! -e *.desktop ]; then
+desktopfile=$(ls -1 "$appdir"/*.desktop | head -n1)
+
+if [ ! -f "$desktopfile" ]; then
     echo "No desktop file found!"
     exit 1
 fi
 
-binary="$appdir"/usr/bin/$(sed -n 's|^Exec=||p' $(ls -1 *.desktop))
+binary="$appdir"/usr/bin/$(sed -n 's|^Exec=||p' "$desktopfile")
 
 if [ -n "$APPIMAGE" ] && [ "$(file -b "$APPIMAGE" | cut -d, -f2)" != " x86-64" ]; then
   libc6arch="libc6"
