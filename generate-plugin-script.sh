@@ -5,7 +5,12 @@ set -e
 
 template=linuxdeploy-plugin-checkrt.template.sh
 tarball=checkrt.tar.gz
-out=linuxdeploy-plugin-checkrt.sh
+
+if [ "$ARCH" != "" ]; then
+    out=linuxdeploy-plugin-checkrt-"$ARCH".sh
+else
+    out=linuxdeploy-plugin-checkrt.sh
+fi
 
 make tarball -j$(nproc)
 
