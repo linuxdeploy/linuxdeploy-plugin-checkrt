@@ -10,11 +10,11 @@ env:
  
 script:
   - mkdir -p ./out/
-  - docker run --rm -it -v "${PWD}:/ws" "$DOCKER_IMAGE" /bin/bash -xc "cd /ws; bash -xe ./generate-plugin-script.sh"
+  - docker run --rm -it -e ARCH -v "${PWD}:/ws" "$DOCKER_IMAGE" /bin/bash -xc "cd /ws; bash -xe ./generate-plugin-script.sh"
   - wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
   # make sure only pushes to master create a new release, otherwise pretend PR and upload to transfer.sh
   - if [ "$TRAVIS_BRANCH" != "master" ]; then export TRAVIS_EVENT_TYPE=pull_request; fi
-  - bash ./upload.sh linuxdeploy-plugin-checkrt.sh
+  - bash ./upload.sh linuxdeploy-plugin-checkrt*.sh
 
 branches:
   except:
