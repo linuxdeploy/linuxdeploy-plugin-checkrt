@@ -46,19 +46,11 @@ echo "Extracting binaries"
 dd if="$script" skip="$OFFSET" iflag=skip_bytes,count_bytes 2>/dev/null | tar -xz
 
 # copy system libraries
-mkdir -p usr/optional/{libstdc++,libgcc}
-
-for path in /usr/lib/x86_64-linux-gnu/libstdc++.so.6; do
-    if [ -f "$path" ]; then
-        echo "Copying into AppDir:: $path"
-        cp "$path" usr/optional/libstdc++/
-    fi
-done
-
-for path in /lib/x86_64-linux-gnu/libgcc_s.so.1 /lib/x86_64-linux-gnu/libm.so.6 lib/x86_64-linux-gnu/libc.so.6; do
+for path in /usr/lib/x86_64-linux-gnu/libstdc++.so.6 /lib/x86_64-linux-gnu/libgcc_s.so.1 /lib/x86_64-linux-gnu/libm.so.6 lib/x86_64-linux-gnu/libc.so.6; do
     if [ -f "$path" ]; then
         echo "Copying into AppDir: $path"
-        cp "$path" usr/optional/libgcc/
+        mkdir -p usr/optional/$(basename "$path")
+        cp "$path" usr/optional/$(basename "$path")
     fi
 done
 
