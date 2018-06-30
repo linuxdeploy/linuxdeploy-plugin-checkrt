@@ -4,3 +4,4 @@
 *.so
 *.tar*
 linuxdeploy-plugin-checkrt.sh
+*_test

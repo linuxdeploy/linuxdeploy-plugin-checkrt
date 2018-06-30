@@ -39,16 +39,18 @@ if [ ! -d "$APPDIR" ]; then
     exit 1
 fi
 
-pushd "$APPDIR"
+pushd "$APPDIR" &>/dev/null
 
 # extract files from appended tarball
-dd if="$script" skip="$OFFSET" iflag=skip_bytes,count_bytes | tar xvz
+echo "Extracting binaries"
+dd if="$script" skip="$OFFSET" iflag=skip_bytes,count_bytes 2>/dev/null | tar -xz
 
 # copy system libraries
 mkdir -p usr/optional/{libstdc++,libgcc_s}
 
 for path in /usr/lib/x86_64-linux-gnu/libstdc++.so.6; do
     if [ -f "$path" ]; then
+        echo "Copying libstdc++: $path"
         cp "$path" usr/optional/libstdc++/
         break
     fi
@@ -56,6 +58,7 @@ done
 
 for path in /lib/x86_64-linux-gnu/libgcc_s.so.1; do
     if [ -f "$path" ]; then
+        echo "Copying libgcc_s: $path"
         cp "$path" usr/optional/libgcc_s/
         break
     fi
@@ -66,13 +69,10 @@ if [ -f AppRun ]; then
 fi
 
 # use patched AppRun
-mv AppRun_patched AppRun
-
-# remove unused shell script
-[ -f AppRun.sh ] && rm AppRun.sh
+mv AppRun.sh AppRun
 
 # leave AppDir
-popd
+popd &>/dev/null
 
 # important: exit before the appended tarball
 exit
