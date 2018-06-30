@@ -41,3 +41,6 @@ AppRun.c:
 	wget -c "https://raw.githubusercontent.com/AppImage/AppImageKit/appimagetool/master/src/AppRun.c"
 
 .PHONY: checkrt test run_tests all clean
+
+tarball: checkrt
+	tar cfvz checkrt.tar.gz AppRun_patched AppRun.sh

@@ -1,3 +1,6 @@
 /AppRun.c
 /AppRun_patched*
 *.o
+*.so
+*.tar*
+linuxdeploy-plugin-checkrt.sh
