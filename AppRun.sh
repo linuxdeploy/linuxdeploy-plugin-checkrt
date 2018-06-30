@@ -23,7 +23,7 @@ fi
 if [ -e "$appdir"/usr/optional/libstdc++/libstdc++.so.6 ]; then
   lib=$(PATH="/sbin:$PATH" ldconfig -p | grep "libstdc++\.so\.6 ($libc6arch)" | awk 'NR==1{print $NF}')
   sym_sys=$(tr '\0' '\n' < "$lib" | grep -e '^GLIBCXX_3\.4' | tail -n1)
-  sym_app=$(tr '\0' '\n' < "./optional/libstdc++/libstdc++.so.6" | grep -e '^GLIBCXX_3\.4' | tail -n1)
+  sym_app=$(tr '\0' '\n' < "$appdir"/usr/optional/libstdc++/libstdc++.so.6 | grep -e '^GLIBCXX_3\.4' | tail -n1)
   if [ $(printf "${sym_sys}\n${sym_app}"| sort -V | tail -1) != "$sym_sys" ]; then
     cxxpath="$appdir"/optional/libstdc++:
   fi
@@ -32,7 +32,7 @@ fi
 if [ -e "$appdir"/usr/optional/libgcc/libgcc_s.so.1 ]; then
   lib="$(PATH="/sbin:$PATH" ldconfig -p | grep "libgcc_s\.so\.1 ($libc6arch)" | awk 'NR==1{print $NF}')"
   sym_sys=$(tr '\0' '\n' < "$lib" | grep -e '^GCC_[0-9]\\.[0-9]' | tail -n1)
-  sym_app=$(tr '\0' '\n' < "./optional/libgcc/libgcc_s.so.1" | grep -e '^GCC_[0-9]\\.[0-9]' | tail -n1)
+  sym_app=$(tr '\0' '\n' < "$appdir"/usr/optional/libgcc/libgcc_s.so.1 | grep -e '^GCC_[0-9]\\.[0-9]' | tail -n1)
   if [ "$(printf "${sym_sys}\n${sym_app}"| sort -V | tail -1)" != "$sym_sys" ]; then
     gccpath="$appdir"/optional/libgcc:
   fi
@@ -49,5 +49,5 @@ fi
 #echo ">>>>> $LD_LIBRARY_PATH"
 #echo ">>>>> $LD_PRELOAD"
 
-exec $binary "$@"
+exec "$binary" "$@"
 
