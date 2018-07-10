@@ -17,22 +17,27 @@ show_usage() {
 
 APPDIR=
 
-case "$1" in
-    --plugin-api-version)
-        echo "0"
-        exit 0
-        ;;
-    --appdir)
-        APPDIR="$2"
-        shift
-        shift
-        ;;
-    *)
-        echo "Invalid argument: $1"
-        echo
-        show_usage
-        exit 1
-esac
+while [ "$1" != "" ]; do
+    case "$1" in
+        --plugin-api-version)
+            echo "0"
+            exit 0
+            ;;
+        --appdir)
+            APPDIR="$2"
+            shift
+            shift
+            ;;
+        --help)
+            show_usage
+            exit 0
+        *)
+            echo "Invalid argument: $1"
+            echo
+            show_usage
+            exit 1
+    esac
+done
 
 if [ ! -d "$APPDIR" ]; then
     echo "No such directory: $APPDIR"
