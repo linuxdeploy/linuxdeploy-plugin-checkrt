@@ -31,11 +31,13 @@ while [ "$1" != "" ]; do
         --help)
             show_usage
             exit 0
+            ;;
         *)
             echo "Invalid argument: $1"
             echo
             show_usage
             exit 1
+            ;;
     esac
 done
 
