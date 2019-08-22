@@ -1,4 +1,6 @@
-# The problem
+# linuxdeploy-plugin-checkrt
+
+## The problem
 
 Some projects require newer C++ standards to build them. To keep the glibc dependency low you can
 build a newer GCC version on an older distro and use it to compile the project.
@@ -10,7 +12,7 @@ By the way, while this is primarily an issue with `libstdc++.so.6` in some rare 
 That's because both libraries are part of GCC.
 
 
-# The solution
+## The solution
 
 You would have to know the library version of the host system and decide whether to use a bundled library or not before the
 application is started. This is exactly what the patched AppRun binary does.
@@ -33,3 +35,8 @@ The intended usage is as follows:
    In case it's an external process, it will restore the environment of
    the AppImage parent by reading `/proc/[pid]/environ`.
    This is the conservative approach taken.
+
+
+## Projects using this plugin
+
+- [MediaElch](https://github.com/Komet/MediaElch/)
