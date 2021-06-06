@@ -3,17 +3,20 @@ LDFLAGS += -s
 LIB = exec.so
 EXEC_TEST = exec_test
 ENV_TEST = env_test
+BIN = checkrt copy_libs
 
-checkrt: $(LIB)
-
-test: $(EXEC_TEST) $(ENV_TEST)
-
-all: checkrt test
+all: $(BIN) $(LIB) test
 
 clean:
 	-rm -f $(BIN) $(LIB) $(EXEC_TEST) $(ENV_TEST) *.o
 
-$(BIN): AppRun_patched.o checkrt.o env.o
+checkrt: checkrt.o env.o
+	$(CC) $(LDFLAGS) -o $@ $^ -ldl
+
+copy_libs: copy_libs.o
+	$(CC) $(LDFLAGS) -o $@ $^ -ldl
+
+test: $(EXEC_TEST) $(ENV_TEST)
 
 $(LIB): exec.o env.o
 	$(CC) -shared $(LDFLAGS) -o $@ $^ -ldl
@@ -32,10 +35,10 @@ run_tests: $(EXEC_TEST) $(ENV_TEST)
 	./$(ENV_TEST)
 	./$(EXEC_TEST)
 
-.PHONY: checkrt test run_tests all clean
+.PHONY: $(BIN) test run_tests all clean
 
-tarball: checkrt
-	mkdir usr/optional/ -p
-	cp exec.so usr/optional/
-	tar cfvz checkrt.tar.gz usr/ AppRun.sh
-	rm -rf usr/
+tarball: $(BIN) $(LIB)
+	mkdir -p checkrt.d/
+	cp checkrt $(LIB) checkrt.d/
+	tar cfvz checkrt.tar.gz copy_libs apprun-hooks/ checkrt.d/
+	rm -rf checkrt.d/

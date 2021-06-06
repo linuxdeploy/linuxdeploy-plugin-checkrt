@@ -53,20 +53,8 @@ echo "Extracting binaries"
 dd if="$script" skip="$OFFSET" iflag=skip_bytes,count_bytes 2>/dev/null | tar -xz
 
 # copy system libraries
-for path in /usr/lib/x86_64-linux-gnu/libstdc++.so.6 /lib/x86_64-linux-gnu/libgcc_s.so.1; do
-    if [ -e "$path" ]; then
-        echo "Copying into AppDir: $path"
-        mkdir -p usr/optional/$(basename "$path")
-        cp "$path" usr/optional/$(basename "$path")
-    fi
-done
-
-if [ -f AppRun ]; then
-    rm AppRun
-fi
-
-# use patched AppRun
-mv AppRun.sh AppRun
+./copy_libs
+rm copy_libs
 
 # leave AppDir
 popd &>/dev/null
