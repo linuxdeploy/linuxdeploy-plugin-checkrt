@@ -14,16 +14,16 @@ library_type=
 
 binary="$appdir"/usr/bin/$(sed -n 's|^Exec=||p' "$desktopfile" | cut -d' ' -f1)
 
-for lib_tuple in libstdc++.so.6:'^GLIBCXX_[0-9]\.[0-9]' libgcc_s.so.1:'^GCC_[0-9]\.[0-9]'; do
+for lib_tuple in libstdc++.so.6:'^GLIBCXX_[0-9]' libgcc_s.so.1:'^GCC_[0-9]'; do
     lib_filename=$(echo "$lib_tuple" | cut -d: -f1)
     version_prefix=$(echo "$lib_tuple" | cut -d: -f2)
     lib_dir="$appdir"/usr/optional/"$lib_filename"/
     lib_path="$lib_dir"/"$lib_filename"
     if [ -e "$lib_path" ]; then
       lib=$(PATH="/sbin:$PATH" ldconfig -p | grep "$lib_filename" | awk 'NR==1 {print $NF}')
-      sym_sys=$(tr '\0' '\n' < "$lib" | grep -e "$version_prefix" | tail -n1)
-      sym_app=$(tr '\0' '\n' < "$lib_path" | grep -e "$version_prefix" | tail -n1)
-      if [ z$(printf "${sym_sys}\n${sym_app}" | sort -V | tail -1) != z"$sym_sys" ]; then
+      sym_sys=$(tr '\0' '\n' < "$lib" | grep -e "$version_prefix" | sort --version-sort | tail -n1)
+      sym_app=$(tr '\0' '\n' < "$lib_path" | grep -e "$version_prefix" | sort --version-sort | tail -n1)
+      if [ z$(printf "${sym_sys}\n${sym_app}" | sort --version-sort | tail -n1) != z"$sym_sys" ]; then
         export library_path="$lib_dir"/:"$library_path"
       fi
     fi
