@@ -34,14 +34,11 @@ jobs:
       - name: Build
         run: docker run --rm -i -e ARCH -u "$(id -u)" -v "$PWD":/ws -w /ws "$DOCKER_IMAGE" /bin/bash -xe ./generate-plugin-script.sh
 
-      - name: Inspect
-        run: tree
-
       - name: Archive artifacts
         uses: actions/upload-artifact@v2
         with:
           name: plugin script
-          path: linuxdeploy-plugin-checkrt-"$ARCH".sh
+          path: linuxdeploy-plugin-checkrt*.sh
 
   upload:
     name: Create release and upload artifacts
