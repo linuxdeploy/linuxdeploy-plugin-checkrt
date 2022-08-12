@@ -32,7 +32,7 @@ jobs:
           submodules: recursive
 
       - name: Build
-        run: docker run --rm -i -e ARCH -v "$PWD":/ws -w /ws "$DOCKER_IMAGE" /bin/bash -xe ./generate-plugin-script.sh
+        run: docker run --rm -i -e ARCH -u "$(id -u)" -v "$PWD":/ws -w /ws "$DOCKER_IMAGE" /bin/bash -xe ./generate-plugin-script.sh
 
       - name: Archive artifacts
         uses: actions/upload-artifact@v2
