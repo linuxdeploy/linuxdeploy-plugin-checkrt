@@ -5,3 +5,4 @@
 *.tar*
 linuxdeploy-plugin-checkrt.sh
 *_test
+*.*swp*
