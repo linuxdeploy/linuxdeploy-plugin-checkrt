@@ -43,7 +43,7 @@ jobs:
   upload:
     name: Create release and upload artifacts
     needs:
-      - build-and-test
+      - build
     runs-on: ubuntu-latest
     steps:
       - name: Download artifacts
