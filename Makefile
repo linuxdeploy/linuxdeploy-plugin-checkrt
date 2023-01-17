@@ -11,9 +11,7 @@ test: $(EXEC_TEST) $(ENV_TEST)
 all: checkrt test
 
 clean:
-	-rm -f $(BIN) $(LIB) $(EXEC_TEST) $(ENV_TEST) *.o
-
-$(BIN): AppRun_patched.o checkrt.o env.o
+	-rm -f $(LIB) $(EXEC_TEST) $(ENV_TEST) *.o
 
 $(LIB): exec.o env.o
 	$(CC) -shared $(LDFLAGS) -o $@ $^ -ldl
