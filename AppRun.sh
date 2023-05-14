@@ -37,6 +37,12 @@ if [ -n "$cxxpath" ] || [ -n "$gccpath" ]; then
   fi
 fi
 
+if [ -e "$appdir"/apprun-hooks/ ]; then
+  for hook in "$appdir"/apprun-hooks/*; do
+    APPDIR=$appdir source $hook
+  done
+fi
+
 #echo ">>>>> $LD_LIBRARY_PATH"
 #echo ">>>>> $LD_PRELOAD"
 
